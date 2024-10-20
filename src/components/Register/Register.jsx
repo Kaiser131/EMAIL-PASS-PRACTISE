@@ -1,12 +1,31 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from "../../firebase/firebase.config";
+
 
 const Register = () => {
 
+
+
+    // majhe majhe auto import hoina jodi vs code onek khon por open kora hoi .... tokhon jekono kicu export korle auto refresh hoe jabe
+
+
     const handleRegister = e => {
         e.preventDefault();
-        const name = e.target.name.value;
+        // const name = e.target.name.value;
         const email = e.target.email.value;
         const password = e.target.password.value;
-        console.log(name, email, password);
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(result => {
+                const loggedUser = result.user;
+                console.log(loggedUser);
+            })
+            .catch(error => {
+                console.log('error', error.message);
+            });
+
+
+
     };
 
 
