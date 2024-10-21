@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import auth from "../../firebase/firebase.config";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,8 +7,6 @@ import { GiCrossedSwords } from "react-icons/gi";
 
 
 const Register = () => {
-
-
     const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
     const [show, setShow] = useState(true);
@@ -16,7 +14,7 @@ const Register = () => {
     // majhe majhe auto import hoina jodi vs code onek khon por open kora hoi .... tokhon jekono kicu export korle auto refresh hoe jabe
     const handleRegister = e => {
         e.preventDefault();
-        // const name = e.target.name.value;
+        const name = e.target.name.value;
         const email = e.target.email.value;
         const password = e.target.password.value;
         const terms = e.target.terms.checked;
@@ -43,12 +41,28 @@ const Register = () => {
             .then(result => {
                 const loggedUser = result.user;
                 console.log(loggedUser);
-                setSuccessMsg('User Created Successfully');
+
+                // update name
+                updateProfile(result.user, {
+                    displayName: name
+                })
+                    .then(() => {
+                        setSuccessMsg('User Created Successfully');
+                    })
+                    .catch(error => {
+                        setErrorMsg(error.message);
+                    });
+
+
             })
             .catch(error => {
                 console.log('error', error.message);
                 setErrorMsg(error.message);
             });
+
+
+
+
     };
 
     const handleShowPass = () => {
